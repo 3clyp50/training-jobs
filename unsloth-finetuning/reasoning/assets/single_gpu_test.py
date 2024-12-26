@@ -12,7 +12,7 @@ wandb.init(
     config={
         "learning_rate": 3e-5,
         "architecture": "Qwen2.5-7B",
-        "dataset": "O1-OPEN/OpenO1-SFT-Pro",
+        "dataset": "O1-OPEN/OpenO1-SFT",
         "epochs": 3,
     }
 )
@@ -35,8 +35,8 @@ model.gradient_checkpointing_enable()
 
 # 4. Load datasets
 #    Splitting 80/20 for demonstration purposes, adjust as needed.
-train_dataset = load_dataset("O1-OPEN/OpenO1-SFT-Pro", split="train[:80%]")
-eval_dataset = load_dataset("O1-OPEN/OpenO1-SFT-Pro", split="train[80%:]")
+train_dataset = load_dataset("O1-OPEN/OpenO1-SFT", split="train[:80%]")
+eval_dataset = load_dataset("O1-OPEN/OpenO1-SFT", split="train[80%:]")
 
 print("Train Dataset columns:", train_dataset.column_names)
 print("Eval Dataset columns:", eval_dataset.column_names)
@@ -123,7 +123,7 @@ trainer = SFTTrainer(
     dataset_text_field="text",
     max_seq_length=max_seq_length,
     dataset_num_proc=4,      # Adjust for faster dataset processing if needed
-    packing=True,            # Packing can help reduce wasted sequence space
+    packing=False,            # Packing can help reduce wasted sequence space
     args=training_args,
     compute_metrics=compute_metrics,
     callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],
